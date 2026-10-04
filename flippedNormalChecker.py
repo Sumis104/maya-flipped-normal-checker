@@ -19,13 +19,13 @@ def check_flipped_normals(mesh):
     faces = cmds.polyEvaluate(mesh, face=True)
     flipped_faces = []
     for i in range(faces):
-        get_face = mesh+'.f['+str(i)+']'
-        face_normal = get_face_normal(get_face)
-        face_center = get_face_center(get_face)
+        face_name = mesh+'.f['+str(i)+']'
+        face_normal = get_face_normal(face_name)
+        face_center = get_face_center(face_name)
         outward_vector = [face_center[j] - mesh_center[j] for j in range(3)]
         dot_product = sum(face_normal[j] * outward_vector[j] for j in range(3))
         if dot_product < 0:
-            flipped_faces.append(get_face)
+            flipped_faces.append(face_name)
     return flipped_faces
 
 def main():
