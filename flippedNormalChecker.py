@@ -14,10 +14,21 @@ def get_mesh_center(mesh):
     vertex_coords = cmds.xform(mesh + '.vtx[*]', q=True, ws=True, t=True)
     mesh_center = [sum(vertex_coords[i::3]) / (len(vertex_coords) / 3) for i in range(3)]
     return mesh_center
+def check_flipped_normals(mesh):
+    mesh_center = get_mesh_center(mesh)
+    faces = cmds.polyEvaluate(mesh, face=True)
+    flipped_faces = []
+    for i in range(faces):
+        get_face = mesh+'.f['+str(i)+']'
+        face_normal = get_face_normal(get_face)
+        face_center = get_face_center(get_face)
+        outward_vector = [face_center[j] - mesh_center[j] for j in range(3)]
+        dot_product = sum(face_normal[j] * outward_vector[j] for j in range(3))
+        if dot_product < 0:
+            flipped_faces.append(get_face)
+    return flipped_faces
+
 def main():
-    print(get_face_normal('pCube1.f[1]'))
-    print(get_face_center('pCube1.f[1]'))
-    print(get_mesh_center('pCube1'))
-    
+    print(check_flipped_normals(cmds.ls(selection=True)[0]))
 if __name__ == "__main__":
     main()
