@@ -7,11 +7,17 @@ def get_face_normal(face):
     return [float(x) for x in normal_vector]
 
 def get_face_center(face):
-    face_vertex = cmds.xform(face, q=True, ws=True, t=True)
-    face_center = [sum(face_vertex[i::3]) / (len(face_vertex) / 3) for i in range(3)]
+    face_vertices = cmds.xform(face, q=True, ws=True, t=True)
+    face_center = [sum(face_vertices[i::3]) / (len(face_vertices) / 3) for i in range(3)]
     return face_center
+def get_mesh_center(mesh):
+    vertex_coords = cmds.xform(mesh + '.vtx[*]', q=True, ws=True, t=True)
+    mesh_center = [sum(vertex_coords[i::3]) / (len(vertex_coords) / 3) for i in range(3)]
+    return mesh_center
 def main():
     print(get_face_normal('pCube1.f[1]'))
     print(get_face_center('pCube1.f[1]'))
+    print(get_mesh_center('pCube1'))
+    
 if __name__ == "__main__":
     main()
