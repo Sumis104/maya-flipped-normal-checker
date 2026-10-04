@@ -29,6 +29,13 @@ def check_flipped_normals(mesh):
     return flipped_faces
 
 def main():
-    print(check_flipped_normals(cmds.ls(selection=True)[0]))
+    flipped_faces = check_flipped_normals(cmds.ls(selection=True)[0])
+    if flipped_faces:
+        cmds.select(flipped_faces)
+        print("Flipped normals found", flipped_faces)
+        
+    else:
+        print("No flipped normals found.")
+
 if __name__ == "__main__":
     main()
